@@ -102,7 +102,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             execute(message);
         }
         catch (TelegramApiException telegramApiException) {
-            ///
+            telegramApiException.printStackTrace();
         }
     }
 
@@ -157,8 +157,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                 if (amount > dateList.size()) amount = dateList.size();
                 int count = 1; StringBuilder stringBuilder = new StringBuilder();
                 for (int i = humidityList.size() - amount; i < humidityList.size(); i++) {
-                    stringBuilder.append(count + ". " + "Влажность: " + humidityList.get(i) + "%" +
-                            "\nДата измерения: " + dateList.get(i).replaceAll("T", " ").replaceAll("Z", " ") + "\n\n");
+                    stringBuilder.append(count).append(". ")
+                            .append("Влажность: ").append(humidityList.get(i)).append("%")
+                            .append("\nДата измерения: ").append(dateList.get(i).replaceAll("T", " ")
+                                    .replaceAll("Z", " ")).append("\n\n");
                     count++;
                 }
                 sendMessage(chatId, String.valueOf(stringBuilder));
@@ -186,16 +188,16 @@ public class TelegramBot extends TelegramLongPollingBot {
                 if (amount > dateList.size()) amount = dateList.size();
                 int count = 1; StringBuilder stringBuilder = new StringBuilder();
                 for (int i = pressureList.size() - amount; i < pressureList.size(); i++) {
-                    stringBuilder.append(count + ". " + "Давление: " + pressureList.get(i) + " HPA" +
-                            "\nДата измерения: " + dateList.get(i).replaceAll("T", " ").replaceAll("Z", " ") + "\n\n");
+                    stringBuilder.append(count).append(". ").append("Давление: ")
+                            .append(pressureList.get(i)).append(" HPA").append("\nДата измерения: ")
+                            .append(dateList.get(i).replaceAll("T", " ")
+                            .replaceAll("Z", " ")).append("\n\n");
                     count++;
                 }
                 sendMessage(chatId, String.valueOf(stringBuilder));
             }
-        } catch (MalformedURLException malformedURLException) {
+        } catch (IOException malformedURLException) {
             throw new RuntimeException(malformedURLException);
-        } catch (IOException ioException) {
-            throw new RuntimeException(ioException);
         }
     }
 
@@ -239,10 +241,8 @@ public class TelegramBot extends TelegramLongPollingBot {
             else {
                 return String.valueOf(Double.parseDouble(getOneParameter(url, "field1")));
             }
-        } catch (MalformedURLException malformedURLException) {
+        } catch (IOException malformedURLException) {
             throw new RuntimeException(malformedURLException);
-        } catch (IOException ioException) {
-            throw new RuntimeException(ioException);
         }
     }
 
@@ -257,10 +257,8 @@ public class TelegramBot extends TelegramLongPollingBot {
             else {
                 return getOneParameter(url, "field2");
             }
-        } catch (MalformedURLException malformedURLException) {
+        } catch (IOException malformedURLException) {
             throw new RuntimeException(malformedURLException);
-        } catch (IOException ioException) {
-            throw new RuntimeException(ioException);
         }
     }
 
@@ -275,10 +273,8 @@ public class TelegramBot extends TelegramLongPollingBot {
             else {
                 return getOneParameter(url, "field3");
             }
-        } catch (MalformedURLException malformedURLException) {
+        } catch (IOException malformedURLException) {
             throw new RuntimeException(malformedURLException);
-        } catch (IOException ioException) {
-            throw new RuntimeException(ioException);
         }
     }
 
@@ -302,12 +298,11 @@ public class TelegramBot extends TelegramLongPollingBot {
             if (connection.getResponseCode() != 200)
                 throw new RuntimeException("ResponseCode: " + connection.getResponseCode());
             else {
-                return getOneParameter(url, "created_at").replaceAll("T", " ").replaceAll("Z", " ");
+                return getOneParameter(url, "created_at").replaceAll("T", " ")
+                        .replaceAll("Z", " ");
             }
-        } catch (MalformedURLException malformedURLException) {
+        } catch (IOException malformedURLException) {
             throw new RuntimeException(malformedURLException);
-        } catch (IOException ioException) {
-            throw new RuntimeException(ioException);
         }
     }
 
